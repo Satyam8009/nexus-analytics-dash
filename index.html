@@ -3,105 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Dash | Satyam</title>
+    <title>Nexus Dash | Live Action</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-100">
+<body class="bg-slate-50">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
         function App() {
             const [activeTab, setActiveTab] = useState('Home');
+            const [users, setUsers] = useState(1284);
+            const [clicks, setClicks] = useState(0);
 
-            // Sidebar Item Component
-            const NavItem = ({ name, icon }) => (
-                <div 
-                    onClick={() => setActiveTab(name)}
-                    className={`flex items-center p-4 cursor-pointer transition-all ${activeTab === name ? 'bg-indigo-600 text-white rounded-2xl shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
-                >
-                    <i className={`fa-solid fa-${icon} mr-3`}></i>
-                    <span className="font-bold">{name}</span>
-                </div>
-            );
+            // Simulation: Live Users update hona (Interactivity)
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setUsers(prev => prev + Math.floor(Math.random() * 5));
+                }, 3000);
+                return () => clearInterval(interval);
+            }, []);
 
             return (
-                <div className="flex flex-col md:flex-row min-h-screen">
-                    {/* Mobile Header */}
-                    <div className="md:hidden bg-white p-4 flex justify-between items-center shadow-sm">
-                        <h1 className="text-xl font-black italic text-indigo-600">NEXUS</h1>
-                        <i className="fa-solid fa-bars text-xl"></i>
-                    </div>
+                <div className="min-h-screen pb-20 md:pb-0 md:pl-64">
+                    {/* Sidebar - Desktop */}
+                    <nav className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 p-6">
+                        <h1 className="text-2xl font-black text-indigo-600 italic mb-10">NEXUS</h1>
+                        <div className="space-y-2">
+                            {['Home', 'Analytics', 'Users'].map(tab => (
+                                <button 
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`w-full flex items-center p-4 rounded-2xl font-bold transition-all ${activeTab === tab ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
 
-                    {/* Sidebar (Desktop) */}
-                    <div className="hidden md:flex flex-col w-64 bg-white p-6 border-r border-slate-200">
-                        <h1 className="text-3xl font-black italic text-indigo-600 mb-10">NEXUS</h1>
-                        <nav className="space-y-2">
-                            <NavItem name="Home" icon="house" />
-                            <NavItem name="Analytics" icon="chart-simple" />
-                            <NavItem name="Users" icon="users" />
-                            <NavItem name="Settings" icon="gear" />
-                        </nav>
-                    </div>
-
-                    {/* Content Area */}
-                    <main className="flex-1 p-6 md:p-10">
-                        <div className="max-w-5xl mx-auto">
-                            <header className="mb-8">
-                                <h2 className="text-3xl font-extrabold text-slate-800">Welcome back, Satyam! 👋</h2>
-                                <p className="text-slate-500 font-medium">Everything is running smoothly on your server.</p>
+                    {/* Main Content */}
+                    <main className="p-6">
+                        <div className="max-w-4xl mx-auto">
+                            <header className="flex justify-between items-center mb-8">
+                                <div>
+                                    <h2 className="text-2xl font-bold">Nexus {activeTab}</h2>
+                                    <p className="text-slate-500">React State: <span className="text-indigo-600 font-bold">Active</span></p>
+                                </div>
+                                <div className="bg-white px-4 py-2 rounded-full shadow-sm border font-bold text-slate-700">
+                                    Clicks: {clicks}
+                                </div>
                             </header>
 
-                            {/* Stats Cards */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                                <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
-                                    <div className="h-12 w-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-4">
-                                        <i className="fa-solid fa-rocket text-xl"></i>
-                                    </div>
-                                    <p className="text-slate-500 font-bold text-xs uppercase tracking-widest">Performance</p>
-                                    <h3 className="text-2xl font-black text-slate-800">99.9%</h3>
+                            {/* Working Cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div className="bg-white p-6 rounded-[2rem] border-2 border-transparent hover:border-indigo-500 transition-all shadow-sm">
+                                    <p className="text-slate-400 font-bold text-xs uppercase mb-2">Live Users (Auto-Update)</p>
+                                    <h3 className="text-4xl font-black text-slate-800 tracking-tight">{users.toLocaleString()}</h3>
                                 </div>
-
-                                <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
-                                    <div className="h-12 w-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-4">
-                                        <i className="fa-solid fa-signal text-xl"></i>
-                                    </div>
-                                    <p className="text-slate-500 font-bold text-xs uppercase tracking-widest">Live Users</p>
-                                    <h3 className="text-2xl font-black text-slate-800">1,284</h3>
-                                </div>
-
-                                <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200 lg:col-span-1 sm:col-span-2">
-                                    <div className="h-12 w-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-4">
-                                        <i className="fa-solid fa-shield-halved text-xl"></i>
-                                    </div>
-                                    <p className="text-slate-500 font-bold text-xs uppercase tracking-widest">Security</p>
-                                    <h3 className="text-2xl font-black text-slate-800">Verified</h3>
+                                
+                                <div 
+                                    onClick={() => setClicks(clicks + 1)}
+                                    className="bg-indigo-600 p-6 rounded-[2rem] shadow-xl cursor-pointer active:scale-95 transition-transform text-white"
+                                >
+                                    <p className="font-bold text-xs uppercase opacity-80 mb-2">Interaction Test</p>
+                                    <h3 className="text-2xl font-bold text-white">Tap to Increase Clicks 👆</h3>
                                 </div>
                             </div>
 
                             {/* Action Area */}
-                            <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl overflow-hidden relative">
-                                <div className="relative z-10">
-                                    <h3 className="text-2xl font-bold mb-2">Build Your Future 🚀</h3>
-                                    <p className="text-slate-400 max-w-md">The Nexus system is now ready for custom API integration and database connection.</p>
-                                    <button 
-                                        onClick={() => alert("Ready to connect with MongoDB!")}
-                                        className="mt-6 bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-indigo-50 transition-colors"
-                                    >
-                                        Get Started
-                                    </button>
+                            <div className="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm">
+                                <h4 className="font-bold text-xl mb-4">MERN Integration Status</h4>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                        <span className="font-medium text-slate-600">Frontend (React)</span>
+                                        <span className="bg-emerald-100 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold uppercase">Working</span>
+                                    </div>
+                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                        <span className="font-medium text-slate-600">Vercel Server</span>
+                                        <span className="bg-emerald-100 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold uppercase">Live</span>
+                                    </div>
+                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl opacity-50">
+                                        <span className="font-medium text-slate-600">Database (MongoDB)</span>
+                                        <span className="bg-slate-200 text-slate-500 px-3 py-1 rounded-lg text-xs font-bold uppercase">Pending</span>
+                                    </div>
                                 </div>
-                                <div className="opacity-10 text-[10rem] absolute -right-10 -bottom-10">
-                                    <i className="fa-solid fa-code"></i>
-                                </div>
+                                <button 
+                                    onClick={() => alert("Bhai, React perfectly kaam kar rahi hai! Agla step Database connect karna hai.")}
+                                    className="w-full mt-6 bg-slate-900 text-white p-5 rounded-2xl font-bold hover:bg-black transition-colors"
+                                >
+                                    Run System Diagnostic
+                                </button>
                             </div>
                         </div>
                     </main>
+
+                    {/* Mobile Navigation (Taaki mobile pr "Work" krta dikhe) */}
+                    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 flex justify-around">
+                        {['Home', 'Analytics', 'Users'].map(tab => (
+                            <i 
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`fa-solid fa-${tab === 'Home' ? 'house' : tab === 'Analytics' ? 'chart-simple' : 'users'} text-xl ${activeTab === tab ? 'text-indigo-600' : 'text-slate-300'}`}
+                            ></i>
+                        ))}
+                    </div>
                 </div>
             );
         }
