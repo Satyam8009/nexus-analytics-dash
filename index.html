@@ -3,60 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Dash | Live</title>
+    <title>Nexus Dash | Interactive</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { margin: 0; background: #f1f5f9; font-family: sans-serif; }
-        .loader-text { display: flex; justify-content: center; align-items: center; height: 100vh; font-weight: bold; color: #6366f1; font-size: 20px; }
-    </style>
+    <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <div id="root">
-        <div class="loader-text">Initializing Dashboard...</div>
-    </div>
+<body class="bg-slate-50">
+    <div id="root"></div>
 
     <script type="text/babel">
-        // Basic Component for testing
-        function App() {
-            return (
-                <div className="min-h-screen p-8 bg-slate-50">
-                    <div className="max-w-4xl mx-auto bg-white p-10 rounded-[2rem] shadow-xl border border-slate-200">
-                        <h1 className="text-4xl font-black text-indigo-600 mb-2 italic">NEXUS DASH 🚀</h1>
-                        <p className="text-slate-500 mb-8 font-medium text-lg">Congratulations! Satyam, your React App is now LIVE.</p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
-                                <p className="text-indigo-900 font-bold">Status</p>
-                                <p className="text-3xl font-black text-indigo-600">Active</p>
-                            </div>
-                            <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
-                                <p className="text-emerald-900 font-bold">Server</p>
-                                <p className="text-3xl font-black text-emerald-600">Running</p>
-                            </div>
-                        </div>
+        const { useState } = React;
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
 
-                        <div className="mt-10 p-6 bg-slate-900 rounded-2xl text-white">
-                            <p className="text-slate-400 text-sm mb-2">Developer Message:</p>
-                            <p className="italic text-lg">"The system is ready. Start building your analytics module now."</p>
+        // Dashboard Data
+        const data = [
+            { name: 'Mon', sales: 400 }, { name: 'Tue', sales: 700 },
+            { name: 'Wed', sales: 500 }, { name: 'Thu', sales: 900 },
+            { name: 'Fri', sales: 1200 }
+        ];
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('Home');
+            const [count, setCount] = useState(0);
+
+            return (
+                <div className="flex flex-col md:flex-row min-h-screen">
+                    {/* Sidebar */}
+                    <div className="w-full md:w-64 bg-indigo-900 text-white p-6">
+                        <h2 className="text-2xl font-black mb-10 italic">NEXUS</h2>
+                        <nav className="space-y-4">
+                            {['Home', 'Sales', 'Users', 'Settings'].map(tab => (
+                                <div 
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`p-3 rounded-xl cursor-pointer transition-all ${activeTab === tab ? 'bg-indigo-600 shadow-lg' : 'hover:bg-indigo-800 text-indigo-200'}`}
+                                >
+                                    <i className={`fa-solid fa-${tab === 'Home' ? 'house' : tab === 'Sales' ? 'chart-line' : tab === 'Users' ? 'users' : 'gear'} mr-3`}></i>
+                                    {tab}
+                                </div>
+                            ))}
+                        </nav>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="flex-1 p-6 md:p-10">
+                        <header className="flex justify-between items-center mb-10">
+                            <h1 className="text-2xl font-bold text-slate-800">{activeTab} Overview</h1>
+                            <button 
+                                onClick={() => {
+                                    setCount(count + 1);
+                                    alert("Bhai, React working hai! Click Count: " + (count + 1));
+                                }}
+                                className="bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform"
+                            >
+                                <i className="fa-solid fa-plus mr-2"></i> Action Button
+                            </button>
+                        </header>
+
+                        {/* Interactive Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                            <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                                <h3 className="text-slate-400 font-bold text-sm mb-4 uppercase">Weekly Growth</h3>
+                                <div className="h-64">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <LineChart data={data}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                            <XAxis dataKey="name" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Line type="monotone" dataKey="sales" stroke="#4f46e5" strokeWidth={4} dot={{r: 6}} />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200 flex flex-col justify-center text-center">
+                                <i className="fa-solid fa-bolt text-4xl text-amber-500 mb-4"></i>
+                                <h3 className="text-2xl font-black text-slate-800">Ready to Scale?</h3>
+                                <p className="text-slate-500 mt-2 mb-6">Aapka backend server bhi running state mein hai.</p>
+                                <div className="flex justify-center gap-4 text-xs font-bold text-slate-400">
+                                    <span>Vercel Edge</span> • <span>React 18</span> • <span>MERN Stack</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        // Render logic with debugger
-        console.log("React is starting...");
-        try {
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-            console.log("Render successful!");
-        } catch (err) {
-            console.error("Render failed:", err);
-            document.getElementById('root').innerHTML = `<div style="padding: 50px; color: red;">Render Error: ${err.message}</div>`;
-        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
