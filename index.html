@@ -3,83 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Dash | Live Portfolio</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <title>Nexus Dash | Live</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #f8fafc; font-family: sans-serif; }
-        #root { min-height: 100vh; }
+        body { margin: 0; background: #f1f5f9; font-family: sans-serif; }
+        .loader-text { display: flex; justify-content: center; align-items: center; height: 100vh; font-weight: bold; color: #6366f1; font-size: 20px; }
     </style>
 </head>
 <body>
-    <div id="root text-center p-20">Loading Dashboard...</div>
+    <div id="root">
+        <div class="loader-text">Initializing Dashboard...</div>
+    </div>
 
     <script type="text/babel">
-        const { useState } = React;
-        const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
-
-        const data = [
-            { name: 'Jan', pv: 2400 }, { name: 'Feb', pv: 1398 },
-            { name: 'Mar', pv: 9800 }, { name: 'Apr', pv: 3908 },
-            { name: 'May', pv: 4800 }, { name: 'Jun', pv: 3800 }
-        ];
-
+        // Basic Component for testing
         function App() {
             return (
-                <div className="p-6 lg:p-12 max-w-7xl mx-auto">
-                    <header className="mb-10 flex justify-between items-center">
-                        <div>
-                            <h1 className="text-4xl font-black text-slate-900">NEXUS DASH 🚀</h1>
-                            <p className="text-slate-500 font-medium">Satyam's Enterprise Analytics</p>
+                <div className="min-h-screen p-8 bg-slate-50">
+                    <div className="max-w-4xl mx-auto bg-white p-10 rounded-[2rem] shadow-xl border border-slate-200">
+                        <h1 className="text-4xl font-black text-indigo-600 mb-2 italic">NEXUS DASH 🚀</h1>
+                        <p className="text-slate-500 mb-8 font-medium text-lg">Congratulations! Satyam, your React App is now LIVE.</p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+                                <p className="text-indigo-900 font-bold">Status</p>
+                                <p className="text-3xl font-black text-indigo-600">Active</p>
+                            </div>
+                            <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                <p className="text-emerald-900 font-bold">Server</p>
+                                <p className="text-3xl font-black text-emerald-600">Running</p>
+                            </div>
                         </div>
-                        <div className="h-12 w-12 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg">
-                            <i className="fa-solid fa-user"></i>
-                        </div>
-                    </header>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Revenue</p>
-                            <h3 className="text-3xl font-black text-slate-900">$54,230</h3>
-                        </div>
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Active Projects</p>
-                            <h3 className="text-3xl font-black text-slate-900">12</h3>
-                        </div>
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Efficiency</p>
-                            <h3 className="text-3xl font-black text-emerald-600">98.2%</h3>
-                        </div>
-                    </div>
-
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                        <h3 className="text-xl font-bold mb-6">Growth Analytics</h3>
-                        <div className="h-80 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={data}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                                    <YAxis axisLine={false} tickLine={false} />
-                                    <Tooltip />
-                                    <Area type="monotone" dataKey="pv" stroke="#6366f1" strokeWidth={4} fill="#6366f1" fillOpacity={0.1} />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                        <div className="mt-10 p-6 bg-slate-900 rounded-2xl text-white">
+                            <p className="text-slate-400 text-sm mb-2">Developer Message:</p>
+                            <p className="italic text-lg">"The system is ready. Start building your analytics module now."</p>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        // Render with Error Protection
+        // Render logic with debugger
+        console.log("React is starting...");
         try {
             const root = ReactDOM.createRoot(document.getElementById('root'));
             root.render(<App />);
+            console.log("Render successful!");
         } catch (err) {
-            document.getElementById('root').innerHTML = `<div class="p-20 text-red-500">Error: ${err.message}</div>`;
+            console.error("Render failed:", err);
+            document.getElementById('root').innerHTML = `<div style="padding: 50px; color: red;">Render Error: ${err.message}</div>`;
         }
     </script>
 </body>
